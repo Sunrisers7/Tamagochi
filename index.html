@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>тамагочи | чёрно-белая история · бьющееся сердце</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* эстетика, текст можно выделить при желании */
+        }
+
+        body {
+            min-height: 100vh;
+            background: #000000;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            transition: background 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* Главный контейнер */
+        .site-container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ========= ЭКРАН ВХОДА (анимация приветствия) ========= */
+        .entry-screen {
+            background: #0a0a0a;
+            border-radius: 56px;
+            padding: 2rem 1.8rem;
+            text-align: center;
+            border: 1px solid #2c2c2c;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+            transition: opacity 0.8s ease, transform 0.6s ease;
+            backdrop-filter: blur(2px);
+        }
+
+        .entry-title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #f5f5f5, #aaa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            animation: titlePulse 1.8s infinite alternate;
+        }
+
+        @keyframes titlePulse {
+            0% { opacity: 0.6; letter-spacing: -1px; filter: blur(0px);}
+            100% { opacity: 1; letter-spacing: 2px; filter: blur(0.5px); text-shadow: 0 0 6px white;}
+        }
+
+        .entry-sub {
+            color: #aaa;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .start-button {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #f0f0f0;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .start-button:hover {
+            background: #2a2a2a;
+            border-color: #7a7a7a;
+            transform: scale(1.02);
+            color: white;
+        }
+
+        /* ========= ОСНОВНОЙ КОНТЕНТ (изначально скрыт) ========= */
+        .main-content {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+            background: #0a0a0a;
+            border-radius: 56px;
+            padding: 2rem 1.8rem;
+            border: 1px solid #2c2c2c;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5);
+        }
+
+        .main-content.reveal {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.8s ease, visibility 0s linear 0s;
+        }
+
+        /* строки стихов — чёрно-белые, появляются постепенно */
+        .verse-line {
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #e0e0e0;
+            margin-bottom: 1.4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.5s ease;
+            letter-spacing: -0.2px;
+            border-left: 3px solid transparent;
+            padding-left: 1rem;
+        }
+
+        .verse-line.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* акцент на тамагочи */
+        .highlight-bw {
+            background: #2a2a2a;
+            padding: 0.1rem 0.4rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+        }
+
+        /* ========= КОНТЕЙНЕР БЬЮЩЕГОСЯ СЕРДЦА (вместо поцелуя) ========= */
+        .heartbeat-container {
+            margin-top: 2rem;
+            text-align: center;
+            background: #111111;
+            border-radius: 48px;
+            padding: 1.5rem 1rem;
+            border: 1px solid #333;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* АНИМАЦИЯ БЬЮЩЕГОСЯ СЕРДЦА — очень красивая, плавная пульсация с эффектом сияния */
+        .heart-beat {
+            font-size: 5.5rem;
+            display: inline-block;
+            cursor: default;
+            animation: heartPulse 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 6px rgba(255, 80, 120, 0.5));
+            transition: all 0.2s;
+        }
+
+        @keyframes heartPulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 0 rgba(255, 80, 120, 0);
+            }
+            25% {
+                transform: scale(1.18);
+                text-shadow: 0 0 18px rgba(255, 70, 110, 0.8);
+            }
+            35% {
+                transform: scale(1.22);
+                text-shadow: 0 0 25px rgba(255, 50, 100, 0.9);
+            }
+            45% {
+                transform: scale(1.1);
+                text-shadow: 0 0 12px rgba(255, 80, 120, 0.6);
+            }
+            60% {
+                transform: scale(1.02);
+                text-shadow: 0 0 4px rgba(255, 80, 120, 0.3);
+            }
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 0 rgba(255, 80, 120, 0);
+            }
+        }
+
+        /* дополнительная градиентная обводка для сердца (изящно) */
+        .heart-beat-wrapper {
+            background: radial-gradient(circle at center, rgba(255,80,120,0.1), transparent 70%);
+            border-radius: 100px;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .heart-message {
+            color: #bbb;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+            margin-top: 0.8rem;
+            transition: 0.2s;
+        }
+
+        /* класс для финальной анимации "сердце забилось сильнее" после появления */
+        .heart-intense {
+            animation: intenseHeartbeat 0.9s cubic-bezier(0.4, 1.2, 0.6, 1) 2;
+        }
+
+        @keyframes intenseHeartbeat {
+            0% { transform: scale(1); text-shadow: 0 0 0px rgba(255,80,120,0);}
+            30% { transform: scale(1.4); text-shadow: 0 0 30px #ff3366; }
+            60% { transform: scale(1.2); text-shadow: 0 0 20px #ff6680; }
+            100% { transform: scale(1); text-shadow: 0 0 6px rgba(255,80,120,0.5);}
+        }
+
+        /* летящие сердечки при активации (вместо поцелуев) */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: heartFly 1.3s ease-out forwards;
+            z-index: 200;
+        }
+
+        @keyframes heartFly {
+            0% {
+                transform: translateY(0) scale(0.4) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-140px) scale(1.2) rotate(15deg);
+                opacity: 0;
+            }
+        }
+
+        /* падающие блестящие искры */
+        .sparkle-drop {
+            position: fixed;
+            pointer-events: none;
+            font-size: 1.3rem;
+            animation: sparkleFall 2s linear forwards;
+            z-index: 199;
+        }
+
+        @keyframes sparkleFall {
+            0% {
+                transform: translateY(-20vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* бонусная пульсация для кнопки старт */
+        @keyframes subtlePulse {
+            0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2);}
+            100% { box-shadow: 0 0 0 8px rgba(255,255,255,0);}
+        }
+
+        /* адаптив */
+        @media (max-width: 550px) {
+            .verse-line {
+                font-size: 1.2rem;
+            }
+            .entry-title {
+                font-size: 2.2rem;
+            }
+            .main-content, .entry-screen {
+                padding: 1.5rem;
+            }
+            .heart-beat {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="site-container">
+    <!-- ЭКРАН ВХОДА (анимация приветствия) -->
+    <div class="entry-screen" id="entryScreen">
+        <div class="entry-title">♡ тамагочи ♡</div>
+        <div class="entry-sub">чёрно-белая история · сердцебиение</div>
+        <button class="start-button" id="startBtn">⟡ начать ⟡</button>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ (слова появляются постепенно) -->
+    <div class="main-content" id="mainContent">
+        <div class="verse-line" data-index="0">Я снова приеду, если ты захочешь, а</div>
+        <div class="verse-line" data-index="1"><span class="highlight-bw">Моя тамагочи</span></div>
+        <div class="verse-line" data-index="2">Если ты хочешь — то я могу бросить</div>
+        <div class="verse-line" data-index="3">Всё, о чём ты меня просишь</div>
+        <div class="verse-line" data-index="4">Кого ты фолловишь? Малышка, ты знаешь: они тебя бросят</div>
+        <div class="verse-line" data-index="5">Все эти клятвы, что ты мне давала, малыш,<br> я надеюсь, ты помнишь</div>
+
+        <!-- КОНТЕЙНЕР С БЬЮЩИМСЯ СЕРДЦЕМ (вместо поцелуя) -->
+        <div class="heartbeat-container" id="heartContainer">
+            <div class="heart-beat-wrapper">
+                <div class="heart-beat" id="beatingHeart">❤️</div>
+            </div>
+            <div class="heart-message" id="heartMsg">сердце ждёт твоего дыхания...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Элементы DOM
+        const entryScreen = document.getElementById('entryScreen');
+        const mainContent = document.getElementById('mainContent');
+        const startBtn = document.getElementById('startBtn');
+        const verseLines = document.querySelectorAll('.verse-line');
+        const heartElement = document.getElementById('beatingHeart');
+        const heartMsgSpan = document.getElementById('heartMsg');
+
+        let animationInterval = null;
+        let currentLineIndex = 0;
+        let allLinesRevealed = false;
+        let heartAnimationTriggered = false;   // чтобы финальное "усиленное биение" случилось один раз
+
+        // ---- КРАСИВАЯ АНИМАЦИЯ ЛЕТЯЩИХ СЕРДЕЦ И ИСКР (ФИНАЛ) ----
+        function createHeartFirework() {
+            // Летящие вверх сердца (как поцелуи, но сердца)
+            const heartIcons = ['❤️', '💗', '💖', '❤️‍🔥', '💓', '💕', '🧡'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 32; i++) {
+                const heartDiv = document.createElement('div');
+                heartDiv.className = 'floating-heart';
+                heartDiv.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 70 + Math.random() * 180;
+                const offsetX = Math.cos(angle) * radius * (Math.random() - 0.5) * 1.5;
+                const offsetY = Math.sin(angle) * radius * 0.7 - 50;
+                let posX = centerX + offsetX;
+                let posY = centerY + offsetY - 30;
+                heartDiv.style.left = posX + 'px';
+                heartDiv.style.top = posY + 'px';
+                heartDiv.style.animationDuration = 0.9 + Math.random() * 0.7 + 's';
+                document.body.appendChild(heartDiv);
+                setTimeout(() => heartDiv.remove(), 1400);
+            }
+
+            // падающие искры (доп. эффект)
+            for (let s = 0; s < 45; s++) {
+                const spark = document.createElement('div');
+                spark.className = 'sparkle-drop';
+                spark.innerHTML = ['✨', '⭐', '💫', '🌟', '⚡'][Math.floor(Math.random() * 5)];
+                spark.style.left = Math.random() * window.innerWidth + 'px';
+                spark.style.fontSize = 1 + Math.random() * 1.4 + 'rem';
+                spark.style.animationDuration = 1.5 + Math.random() * 1.2 + 's';
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 2500);
+            }
+
+            // эффект вспышки на панели сердца (быстрое свечение)
+            const heartContainer = document.getElementById('heartContainer');
+            if (heartContainer) {
+                heartContainer.style.transition = 'background 0.2s';
+                heartContainer.style.backgroundColor = '#1f1a1c';
+                setTimeout(() => {
+                    heartContainer.style.backgroundColor = '#111111';
+                }, 400);
+            }
+        }
+
+        // Функция, которая активирует «усиленное биение сердца» и финальный фейерверк
+        function triggerHeartFinale() {
+            if (heartAnimationTriggered) return;
+            heartAnimationTriggered = true;
+
+            // 1. Добавляем класс для более мощной анимации биения (интенсивное)
+            heartElement.classList.add('heart-intense');
+            setTimeout(() => {
+                heartElement.classList.remove('heart-intense');
+            }, 1000);
+
+            // 2. Меняем текст на романтичный
+            heartMsgSpan.innerHTML = '❤️‍🔥 сердце бьётся для тебя ❤️‍🔥';
+
+            // 3. Запускаем красивый фейерверк из сердец и искр
+            createHeartFirework();
+
+            // 4. Дополнительная смена сообщений для атмосферы
+            let step = 0;
+            const messages = [
+                '💗 пульс учащается...',
+                '❤️ каждое биение — для тебя',
+                '💖 ты в моём сердце навсегда',
+                '🖤🤍 бесконечная нежность'
+            ];
+            const msgInterval = setInterval(() => {
+                if (step < messages.length) {
+                    heartMsgSpan.innerHTML = messages[step] + ' ✨';
+                    step++;
+                } else {
+                    clearInterval(msgInterval);
+                    heartMsgSpan.innerHTML = '❤️‍🔥 сердце бьётся для тебя ❤️‍🔥';
+                }
+            }, 800);
+
+            // также маленькая анимация на само сердце: эффект пульсации тени
+            heartElement.style.filter = 'drop-shadow(0 0 12px #ff3366)';
+            setTimeout(() => {
+                if (heartElement) heartElement.style.filter = '';
+            }, 1000);
+        }
+
+        // ----- Плавный показ строк (каждая появляется через интервал) -----
+        function startWordPlayback() {
+            if (animationInterval) clearInterval(animationInterval);
+            currentLineIndex = 0;
+            allLinesRevealed = false;
+            heartAnimationTriggered = false;
+
+            // Сброс сообщений и внешнего вида сердца
+            heartMsgSpan.innerHTML = 'сердце ждёт твоего дыхания...';
+            heartElement.classList.remove('heart-intense');
+            heartElement.style.filter = '';
+            // Сбросить видимость строк
+            verseLines.forEach(line => {
+                line.classList.remove('visible');
+            });
+
+            let idx = 0;
+            function step() {
+                if (idx < verseLines.length) {
+                    const line = verseLines[idx];
+                    line.classList.add('visible');
+                    idx++;
+                    if (idx === verseLines.length) {
+                        // Все строки показаны -> автоматически запускаем торжественное биение сердца
+                        allLinesRevealed = true;
+                        setTimeout(() => {
+                            if (allLinesRevealed && !heartAnimationTriggered) {
+                                triggerHeartFinale();
+                            }
+                        }, 800); // пауза после последней строки
+                        clearInterval(intervalId);
+                    }
+                } else {
+                    clearInterval(intervalId);
+                }
+            }
+            const intervalId = setInterval(step, 880); // элегантный интервал
+            animationInterval = intervalId;
+        }
+
+        // ----- ОБРАБОТЧИК КНОПКИ "НАЧАТЬ" -----
+        startBtn.addEventListener('click', () => {
+            // Плавно скрываем экран входа с анимацией
+            entryScreen.style.opacity = '0';
+            entryScreen.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                entryScreen.style.display = 'none';
+                mainContent.classList.add('reveal');
+                startWordPlayback();  // запускаем проигрывание строк
+            }, 500);
+        });
+
+        // Дополнительная эстетика: при наведении на строки лёгкий белый акцент
+        verseLines.forEach(line => {
+            line.addEventListener('mouseenter', () => {
+                line.style.borderLeftColor = '#aaa';
+                line.style.transition = '0.2s';
+            });
+            line.addEventListener('mouseleave', () => {
+                line.style.borderLeftColor = 'transparent';
+            });
+        });
+
+        // Эффект пульсации на кнопке "Начать" при загрузке
+        const startButton = document.getElementById('startBtn');
+        if (startButton) {
+            startButton.style.animation = 'subtlePulse 1.4s infinite';
+            setTimeout(() => {
+                if (startButton) startButton.style.animation = '';
+            }, 2800);
+        }
+
+        // Для дополнительной красоты — при клике на само сердце (если кто захочет) не мешает, но автоматика уже есть
+        // Но можно добавить лёгкую реакцию (без нарушения логики)
+        heartElement.addEventListener('click', () => {
+            // Просто приятный эффект при клике, но не активирует финал повторно,
+            // если финал уже был — просто маленькая анимация.
+            if (!heartAnimationTriggered) return;
+            heartElement.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                if (heartElement) heartElement.style.transform = '';
+            }, 200);
+        });
+
+        // Также сделаем так, чтобы фон контейнера с сердцем красиво сиял после финала (дополнительно)
+        const heartContainerDiv = document.getElementById('heartContainer');
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(() => {
+                if (heartAnimationTriggered) {
+                    heartContainerDiv.style.border = '1px solid #ff6680';
+                    setTimeout(() => {
+                        if (heartContainerDiv) heartContainerDiv.style.border = '1px solid #333';
+                    }, 1500);
+                }
+            });
+        });
+        if (heartContainerDiv) {
+            observer.observe(heartContainerDiv, { attributes: true, childList: false });
+        }
+    })();
+</script>
+</body>
+</html>
